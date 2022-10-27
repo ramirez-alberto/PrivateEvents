@@ -12,8 +12,8 @@ using PrivateEvents.Entities;
 namespace PrivateEvents.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20221027070402_CreatingIdentityScheme")]
-    partial class CreatingIdentityScheme
+    [Migration("20221027085034_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,22 +53,22 @@ namespace PrivateEvents.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "494fd181-e275-4b56-ba21-5fb3b05bf038",
-                            ConcurrencyStamp = "9e987580-5899-4868-9fef-4451045aff8c",
+                            Id = "11079f34-825c-49ca-8fca-0746815023f7",
+                            ConcurrencyStamp = "c6bfaf9e-d8ef-41b3-9428-e9dc27673bcd",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "2de63158-0f5c-4b62-b515-005172736626",
-                            ConcurrencyStamp = "9ff85097-ebdf-4ec9-8bac-4d75cbcd652e",
+                            Id = "c1e9d316-ca44-4599-abee-86f2df12a371",
+                            ConcurrencyStamp = "241aefa3-f999-445d-9bdb-86b111556b9e",
                             Name = "AppUser",
                             NormalizedName = "APPUSER"
                         },
                         new
                         {
-                            Id = "077d9dc2-9042-4a68-b778-7710b1139e8a",
-                            ConcurrencyStamp = "5dba2164-7971-4dee-b614-29c34b2848fb",
+                            Id = "a087a653-d814-40c1-9da6-1d04ad4826cf",
+                            ConcurrencyStamp = "d4b93854-4aff-4860-a6ad-1927ef5f2c0e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -178,6 +178,39 @@ namespace PrivateEvents.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("PrivateEvents.Entities.Models.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("OnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("PrivateEvents.Entities.Models.User", b =>

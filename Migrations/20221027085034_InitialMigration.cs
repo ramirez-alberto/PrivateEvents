@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PrivateEvents.Migrations
 {
-    public partial class CreatingIdentityScheme : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +47,23 @@ namespace PrivateEvents.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    OnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.EventId);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,17 +175,17 @@ namespace PrivateEvents.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "077d9dc2-9042-4a68-b778-7710b1139e8a", "5dba2164-7971-4dee-b614-29c34b2848fb", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "11079f34-825c-49ca-8fca-0746815023f7", "c6bfaf9e-d8ef-41b3-9428-e9dc27673bcd", "Visitor", "VISITOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2de63158-0f5c-4b62-b515-005172736626", "9ff85097-ebdf-4ec9-8bac-4d75cbcd652e", "AppUser", "APPUSER" });
+                values: new object[] { "a087a653-d814-40c1-9da6-1d04ad4826cf", "d4b93854-4aff-4860-a6ad-1927ef5f2c0e", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "494fd181-e275-4b56-ba21-5fb3b05bf038", "9e987580-5899-4868-9fef-4451045aff8c", "Visitor", "VISITOR" });
+                values: new object[] { "c1e9d316-ca44-4599-abee-86f2df12a371", "241aefa3-f999-445d-9bdb-86b111556b9e", "AppUser", "APPUSER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -226,6 +243,9 @@ namespace PrivateEvents.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
