@@ -1,9 +1,14 @@
+using PrivateEvents.Entities;
+using PrivateEvents.Entities.Models;
 using PrivateEvents.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<RepositoryContext>();
 builder.Services.ConfigureCORS();
 
 var app = builder.Build();
