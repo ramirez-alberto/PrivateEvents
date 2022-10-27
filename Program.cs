@@ -2,10 +2,12 @@ using PrivateEvents.Entities;
 using PrivateEvents.Entities.Models;
 using PrivateEvents.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.ConfigureSQLServer(builder.Configuration);
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<RepositoryContext>();
