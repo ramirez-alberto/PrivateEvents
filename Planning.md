@@ -10,23 +10,39 @@ Events take place at a specific date and at a location (which you can just store
  as a string, like “Andy’s House”).
 
 ## Requirements
-`Backend Stack`: Net 6 , MYSQL
-### Stories
+`Stack`: Net 6 , MYSQL or MSSQL, Angular
+### Stories    
     As a User
-    I need to create events 
-    So that
+    I need a service for create events 
+    So that I can organize events
+**Acceptance Criteria**
+* Need a way to list all events created
+
 
 ## Design
+**To Do**
+
+[ ] Create the infrastructure
+
+[ ] Home Page, Register and Login Form.
+
+[ ] Create Event View and List All Events View
+
+[ ] Follow Event capabilities 
+
+
+
 ### Models
 
 ***Users***
 
-| Column   | DataType  | Constraint                   |  
-|----------|-----------|------------------------------|
-| Userid   | int       | unique                       |
-| Name     | string    | not-null , 10 char max       |
-| Email    | string    | not-null , 20 char max       |
-| Password | string    | not-null , min:8 char max:30 |
+| Column      | DataType  | Constraint                   |  
+|-------------|-----------|------------------------------|
+| Userid      | int       | unique                       |
+| Name        | string    | not-null , 10 char max       |
+| Email       | string    | not-null , 20 char max       |
+| Password    | string    | not-null , min:8 char max:30 |
+| CreatedDate | date      | not-null                     |
 
 ***Events***
 
@@ -37,6 +53,7 @@ Events take place at a specific date and at a location (which you can just store
 | Description   | string   | nullable                |
 | Date          | date     | not-null                |
 | Location      | string   | not-null, max: 30 char  |
+| CreatedDate   | date     | not-null                |
 
 ***Attendees***
 
