@@ -17,4 +17,6 @@ public class RepositoryContext : IdentityDbContext<User>
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
     }
 
+    public DbSet<Event>? Events {get; set;}
+
 }
