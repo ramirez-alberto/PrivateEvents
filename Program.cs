@@ -4,12 +4,21 @@ using PrivateEvents.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureSQLServer(builder.Configuration);
 builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(
+    opt => {
+        opt.Password.RequireNonAlphanumeric = false;
+        opt.Password.RequireUppercase = false;
+
+        opt.User.RequireUniqueEmail = true;
+    }
+)
     .AddEntityFrameworkStores<RepositoryContext>();
 builder.Services.ConfigureCORS();
 
