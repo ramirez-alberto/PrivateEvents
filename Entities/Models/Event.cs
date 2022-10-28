@@ -28,6 +28,10 @@ public class Event
     [Required]
     [StringLength(50)]
     public string? Location { get; set;}
-    
     public DateTime CreatedDate { get; set;}
+
+    [ForeignKey(nameof(User))]
+    public string Author {get; set;}
+
+    public User User {get; set;}
 }
