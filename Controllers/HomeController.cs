@@ -20,6 +20,7 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
+        _logger.LogInformation("Return Privacy");
         return View();
     }
 

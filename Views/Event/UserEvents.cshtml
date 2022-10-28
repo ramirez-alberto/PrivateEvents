@@ -1,0 +1,14 @@
+@model IEnumerable<PrivateEvents.Entities.Models.Event>;
+
+<partial name="_MenuPartial" />
+<div class="tab-content" id="myTabContent">
+    <a asp-action="Create"> Create a new event</a>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li> @Html.DisplayFor(modelItem => item.Name)</li>
+            <li> @Html.DisplayFor(modelItem => item.Location)</li>
+        }
+    </ul>
+
+</div>
