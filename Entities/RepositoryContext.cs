@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PrivateEvents.Entities.Models;
 using PrivateEvents.Entities.Configuration;
+using Microsoft.AspNetCore.Identity;
 
 namespace PrivateEvents.Entities;
 
@@ -14,6 +15,7 @@ public class RepositoryContext : IdentityDbContext<User>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        //modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles",t => t.ExcludeFromMigrations());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
     }
 
