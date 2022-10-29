@@ -24,14 +24,21 @@ public class EventController : Controller
     }
 
 
-    public IActionResult Index()
+    public IActionResult OldIndex()
     {
         return View();
     }
 
+    [ActionName("Index")]
+    public async Task<IActionResult> GetAllEvents()
+    {
+        var userEvents = _context.Events.Include(e => e.User).AsNoTracking();
+        return View( await userEvents.ToListAsync());
+    }
     public async Task<IActionResult> UserEvents()
     {
-        var userEvents = _context.Events.Include(e => e.User);
+        var userId = _userManager.GetUserId(User);
+        var userEvents = _context.Events.Include(e => e.User).Where( e => e.Author == userId).AsNoTracking();
         return View( await userEvents.ToListAsync());
     }
 
