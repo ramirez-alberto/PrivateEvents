@@ -17,8 +17,10 @@ public class RepositoryContext : IdentityDbContext<User>
         base.OnModelCreating(modelBuilder);
         //modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles",t => t.ExcludeFromMigrations());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new AttendeeConfiguration());
     }
 
     public DbSet<Event>? Events {get; set;}
+    public DbSet<Attendee>? Attendees {get; set;}
 
 }

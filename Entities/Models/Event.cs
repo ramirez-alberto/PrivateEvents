@@ -34,4 +34,8 @@ public class Event
     public string Author {get; set;}
 
     public User User {get; set;}
+
+    public ICollection<Attendee> Attendees { get; set; }
+
+
 }
