@@ -1,0 +1,55 @@
+@model IEnumerable<PrivateEvents.Entities.Models.Attendee>
+
+<partial name="_MenuPartial" />
+<div class="tab-content" id="myTabContent">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.Name)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.Description)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.Location)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.Author)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.OnDate)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Event.CreatedDate)
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>
+            @Html.DisplayFor(model => item.Event.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Event.Description)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Event.Location)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Event.User.Email)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Event.OnDate)
+          </td>
+          <td>
+            @Html.DisplayFor(model => item.Event.CreatedDate)
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+

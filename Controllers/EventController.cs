@@ -33,13 +33,24 @@ public class EventController : Controller
     public async Task<IActionResult> GetAllEvents()
     {
         var userEvents = _context.Events.Include(e => e.User).AsNoTracking();
-        return View( await userEvents.ToListAsync());
+        return View(await userEvents.ToListAsync());
     }
     public async Task<IActionResult> UserEvents()
     {
         var userId = _userManager.GetUserId(User);
-        var userEvents = _context.Events.Include(e => e.User).Where( e => e.Author == userId).AsNoTracking();
-        return View( await userEvents.ToListAsync());
+        var userEvents = _context.Events.Include(e => e.User).Where(e => e.Author == userId).AsNoTracking();
+        return View(await userEvents.ToListAsync());
+    }
+    public async Task<IActionResult> TrackedEvents()
+    {
+        var userEvents = _context.Attendees
+            .Include(a => a.Event)
+                .ThenInclude(e => e.User)
+            .Include(a => a.User)
+            .AsNoTracking()
+            .Where(a => a.UserId.Contains(_userManager.GetUserId(User)));
+        
+        return View(await userEvents.ToListAsync());
     }
 
     public IActionResult Create()
@@ -51,7 +62,7 @@ public class EventController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateEventDto eventDto)
     {
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
             return View(eventDto);
 
         var userID = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -61,8 +72,31 @@ public class EventController : Controller
         eventEntity.Author = userID;
         _context.Add(eventEntity);
         await _context.SaveChangesAsync();
-        
+
         return RedirectToAction(nameof(UserEvents));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FollowEvent(int? eventId)
+    {
+        if (eventId is null)
+            return NotFound();
+
+        var eventEntity = await _context.Events.FirstOrDefaultAsync(e => e.EventId == eventId);
+        
+        if (eventEntity is not null)
+        {
+            var attendee = new Attendee { 
+                EventId = eventEntity.EventId ,
+                UserId  =  _userManager.GetUserId(User) };
+
+            _context.Add(attendee);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        return NotFound();
     }
 
 

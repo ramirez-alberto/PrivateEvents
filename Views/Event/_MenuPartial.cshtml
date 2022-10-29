@@ -1,13 +1,17 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-    <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")" id="home-tab" asp-controller="Event"  asp-action="Index"
-        type="button" role="tab" aria-controls="home" aria-selected="true">All Events</a>
+    <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")" 
+      id="home-tab" asp-controller="Event"  asp-action="Index" 
+      type="button" role="tab" aria-controls="home" >All Events</a>
   </li>
   <li class="nav-item" role="presentation">
-    <a class="nav-link @( ViewContext.RouteData.Values["Action"].ToString() == "UserEvents" ? "active" : "")" id="profile-tab" asp-controller="Event"  asp-action="UserEvents"
-     type="button" role="tab" aria-controls="profile" aria-selected="false">My Events</a>
+    <a class="nav-link @( ViewContext.RouteData.Values["Action"].ToString() == "UserEvents" ? "active" : "")" 
+      id="profile-tab" asp-controller="Event"  asp-action="UserEvents"
+      type="button" role="tab" aria-controls="profile" >My Events</a>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+    <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "TrackedEvents" ? "active" : "")"
+      id="contact-tab" asp-action="TrackedEvents"
+      type="button" role="tab" aria-controls="contact">My Next Events</a>
   </li>
 </ul>
