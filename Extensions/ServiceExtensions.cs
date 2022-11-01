@@ -1,4 +1,6 @@
 using PrivateEvents.Entities;
+using PrivateEvents.Repository;
+using PrivateEvents.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,5 +28,10 @@ public static class ServiceExtensions
         services.AddDbContext<RepositoryContext>( opts =>
          opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"))
          );
+    }
+
+    public static void ConfigureRepository(this IServiceCollection services)
+    {
+        services.AddScoped<IRepositoryWrapper,RepositoryWrapper>();
     }
 }

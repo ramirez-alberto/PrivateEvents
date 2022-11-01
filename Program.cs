@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureSQLServer(builder.Configuration);
+builder.Services.ConfigureRepository();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>(
     opt => {
