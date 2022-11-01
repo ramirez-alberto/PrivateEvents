@@ -48,8 +48,13 @@
             @Html.DisplayFor(model => item.Event.CreatedDate)
           </td>
         </tr>
+        <tr>
+          <form class="form-inline" asp-controller="Event" asp-action="UnfollowEvent">
+            <input type="hidden" name="eventId" value="@item.EventId" />
+            <button type="submit" class="nav-link btn btn-link text-info">Unfollow</button>
+          </form>
+        </tr>
       }
     </tbody>
   </table>
 </div>
-

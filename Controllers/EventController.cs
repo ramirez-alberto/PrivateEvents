@@ -49,7 +49,7 @@ public class EventController : Controller
             .Include(a => a.User)
             .AsNoTracking()
             .Where(a => a.UserId.Contains(_userManager.GetUserId(User)));
-        
+
         return View(await userEvents.ToListAsync());
     }
 
@@ -84,12 +84,14 @@ public class EventController : Controller
             return NotFound();
 
         var eventEntity = await _context.Events.FirstOrDefaultAsync(e => e.EventId == eventId);
-        
+
         if (eventEntity is not null)
         {
-            var attendee = new Attendee { 
-                EventId = eventEntity.EventId ,
-                UserId  =  _userManager.GetUserId(User) };
+            var attendee = new Attendee
+            {
+                EventId = eventEntity.EventId,
+                UserId = _userManager.GetUserId(User)
+            };
 
             _context.Add(attendee);
             await _context.SaveChangesAsync();
@@ -97,6 +99,28 @@ public class EventController : Controller
         }
 
         return NotFound();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UnfollowEvent(int? eventId)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (eventId == null || _context.Attendees == null || userId is null)
+        {
+            return NotFound();
+        }
+        var attendee = await _context.Attendees.FindAsync(eventId,userId);
+
+        if (attendee is not null)
+        {
+            _context.Remove(attendee);
+        }
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+
     }
 
 
