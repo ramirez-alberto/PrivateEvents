@@ -18,16 +18,16 @@ public class EventController : Controller
     private readonly RepositoryContext _context;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private readonly IEventRepository _repo;
+    private readonly IRepositoryWrapper _repo;
     public EventController(
-        RepositoryContext context, IMapper mapper, UserManager<User> userManager, IEventRepository repo)
+        RepositoryContext context, IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
     {
         _context = context;
         _mapper = mapper;
         _userManager = userManager;
         _repo = repo;
     }
-    public EventController(IMapper mapper, UserManager<User> userManager, IEventRepository repo)
+    public EventController(IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -43,23 +43,24 @@ public class EventController : Controller
     [ActionName("Index")]
     public async Task<IActionResult> GetAllEvents()
     {
-        var userEvents = _repo.FindAllEventsAsync();
+        var userEvents = _repo.Event.FindAllEventsAsync();
         return View(await userEvents);
     }
     public async Task<IActionResult> UserEvents()
     {
         var userId = _userManager.GetUserId(User);
-        var userEvents = _repo.FindAllUserEventsAsync(userId);
+        var userEvents = _repo.Event.FindAllUserEventsAsync(userId);
         return View(await userEvents);
     }
     public async Task<IActionResult> TrackedEvents()
     {
+        var userId = _userManager.GetUserId(User);
         var userEvents = _context.Attendees
             .Include(a => a.Event)
                 .ThenInclude(e => e.User)
             .Include(a => a.User)
             .AsNoTracking()
-            .Where(a => a.UserId.Contains(_userManager.GetUserId(User)));
+            .Where(a => a.UserId.Contains(userId));
 
         return View(await userEvents.ToListAsync());
     }
@@ -81,8 +82,10 @@ public class EventController : Controller
         var eventEntity = _mapper.Map<Event>(eventDto);
 
         eventEntity.Author = userID;
-        _context.Add(eventEntity);
-        await _context.SaveChangesAsync();
+
+        _repo.Event.CreateEvent(eventEntity);
+        //_context.Add(eventEntity);
+        await _repo.SaveAsync();
 
         return RedirectToAction(nameof(UserEvents));
     }
