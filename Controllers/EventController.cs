@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PrivateEvents.Entities;
+using PrivateEvents.Repository;
+using PrivateEvents.Contracts;
 using PrivateEvents.Entities.Models;
 using PrivateEvents.Entities.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +18,20 @@ public class EventController : Controller
     private readonly RepositoryContext _context;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    public EventController(RepositoryContext context, IMapper mapper, UserManager<User> userManager)
+    private readonly IEventRepository _repo;
+    public EventController(
+        RepositoryContext context, IMapper mapper, UserManager<User> userManager, IEventRepository repo)
     {
         _context = context;
         _mapper = mapper;
         _userManager = userManager;
+        _repo = repo;
+    }
+    public EventController(IMapper mapper, UserManager<User> userManager, IEventRepository repo)
+    {
+        _mapper = mapper;
+        _userManager = userManager;
+        _repo = repo;
     }
 
 
@@ -32,14 +43,14 @@ public class EventController : Controller
     [ActionName("Index")]
     public async Task<IActionResult> GetAllEvents()
     {
-        var userEvents = _context.Events.Include(e => e.User).AsNoTracking();
-        return View(await userEvents.ToListAsync());
+        var userEvents = _repo.FindAllEventsAsync();
+        return View(await userEvents);
     }
     public async Task<IActionResult> UserEvents()
     {
         var userId = _userManager.GetUserId(User);
-        var userEvents = _context.Events.Include(e => e.User).Where(e => e.Author == userId).AsNoTracking();
-        return View(await userEvents.ToListAsync());
+        var userEvents = _repo.FindAllUserEventsAsync(userId);
+        return View(await userEvents);
     }
     public async Task<IActionResult> TrackedEvents()
     {
