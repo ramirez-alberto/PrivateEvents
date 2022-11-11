@@ -77,8 +77,9 @@ public class EventController : Controller
         if (!ModelState.IsValid)
             return View(eventDto);
 
-        var userID = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        //var userID = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         //or inject usermanager invite.User = await _userManager.GetUserAsync(User); 
+        var userID = _userManager.GetUserId(User);
         var eventEntity = _mapper.Map<Event>(eventDto);
 
         eventEntity.Author = userID;
