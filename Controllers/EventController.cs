@@ -19,20 +19,13 @@ public partial class EventController : Controller
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
     private readonly IRepositoryWrapper _repo;
-    public EventController(
-        RepositoryContext context, IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
+
+    public EventController(IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
     {
-        _context = context;
         _mapper = mapper;
         _userManager = userManager;
         _repo = repo;
     }
-    // public EventController(IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
-    // {
-    //     _mapper = mapper;
-    //     _userManager = userManager;
-    //     _repo = repo;
-    // }
 
 
     public IActionResult OldIndex()
