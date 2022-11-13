@@ -11,7 +11,7 @@ public class EventRepository : RepositoryBase<Event>, IEventRepository
         : base(context) { }
     public async Task<IEnumerable<Event>> FindAllEventsAsync() =>
         await FindAll().Include(e => e.User).ToListAsync();
-    public async Task<IEnumerable<Event>> FindAllUserEventsAsync(string? userId) =>
+    public async Task<IEnumerable<Event>> FindEventsCreatedByUserAsync(string? userId) =>
         await FindByCondition(e => e.Author == userId).Include(u => u.User).ToListAsync();
     public async Task<Event?> FindEventByIdAsync(int? id) =>
         await FindByCondition(evento => evento.EventId == id)
