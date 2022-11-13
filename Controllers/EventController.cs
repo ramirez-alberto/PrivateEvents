@@ -46,23 +46,19 @@ public partial class EventController : Controller
         var userEvents = _repo.Event.FindAllEventsAsync();
         return View(await userEvents);
     }
+
     public async Task<IActionResult> UserEvents()
     {
         var userId = _userManager.GetUserId(User);
-        var userEvents = _repo.Event.FindAllUserEventsAsync(userId);
+        var userEvents = _repo.Event.FindEventsCreatedByUserAsync(userId);
         return View(await userEvents);
     }
     public async Task<IActionResult> TrackedEvents()
     {
         var userId = _userManager.GetUserId(User);
-        var userEvents = _context.Attendees
-            .Include(a => a.Event)
-                .ThenInclude(e => e.User)
-            .Include(a => a.User)
-            .AsNoTracking()
-            .Where(a => a.UserId.Contains(userId));
+        var userEvents = _repo.Attendee.FindEventsAttendedByUser(userId);
 
-        return View(await userEvents.ToListAsync());
+        return View(await userEvents);
     }
 
     public IActionResult Create()
@@ -98,7 +94,7 @@ public partial class EventController : Controller
         if (eventId is null)
             return NotFound();
 
-        var eventEntity = await _context.Events.FirstOrDefaultAsync(e => e.EventId == eventId);
+        var eventEntity = await _repo.Event.FindEventByIdAsync(eventId);
 
         if (eventEntity is not null)
         {
@@ -108,8 +104,8 @@ public partial class EventController : Controller
                 UserId = _userManager.GetUserId(User)
             };
 
-            _context.Add(attendee);
-            await _context.SaveChangesAsync();
+            _repo.Attendee.Add(attendee);
+            await _repo.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -118,21 +114,21 @@ public partial class EventController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UnfollowEvent(int? eventId)
+    public async Task<IActionResult> UnFollowEvent(int? eventId)
     {
         var userId = _userManager.GetUserId(User);
-        if (eventId == null || _context.Attendees == null || userId is null)
+        if (eventId == null || userId is null)
         {
             return NotFound();
         }
-        var attendee = await _context.Attendees.FindAsync(eventId,userId);
+        var attendee = await _repo.Attendee.FindAttendeeByUserandEventId(eventId,userId);
 
         if (attendee is not null)
         {
-            _context.Remove(attendee);
+            _repo.Attendee.Remove(attendee);
         }
 
-        await _context.SaveChangesAsync();
+        await _repo.SaveAsync();
 
         return RedirectToAction(nameof(Index));
 

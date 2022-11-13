@@ -7,12 +7,21 @@ public class RepositoryWrapper : IRepositoryWrapper
 {
     private RepositoryContext _repositoryContext;
     private IEventRepository _event;
+    private IAttendeeRepository _attendee;
 
     public IEventRepository Event 
     {
         get
         {
             return _event ?? new EventRepository(_repositoryContext);
+        }
+    }
+
+    public IAttendeeRepository Attendee
+    {
+        get
+        {
+            return _attendee ?? new AttendeeRepository(_repositoryContext);
         }
     }
 
