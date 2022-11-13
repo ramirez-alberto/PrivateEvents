@@ -13,8 +13,12 @@ public class EventRepository : RepositoryBase<Event>, IEventRepository
         await FindAll().Include(e => e.User).ToListAsync();
     public async Task<IEnumerable<Event>> FindAllUserEventsAsync(string? userId) =>
         await FindByCondition(e => e.Author == userId).Include(u => u.User).ToListAsync();
-    public async Task<Event?> FindEventByIdAsync(EventId id) =>
-        await FindByCondition(evento => evento.EventId == id).FirstOrDefaultAsync();
+    public async Task<Event?> FindEventByIdAsync(int? id) =>
+        await FindByCondition(evento => evento.EventId == id)
+                .Include(e => e.Attendees)
+                .Include(e => e.User)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
     public void CreateEvent(Event evento) =>
         Create(evento);
     public void UpdateEvent(Event evento) =>

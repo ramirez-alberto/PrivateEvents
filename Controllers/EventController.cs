@@ -13,7 +13,7 @@ using AutoMapper;
 namespace PrivateEvents.Controllers;
 
 [Authorize]
-public class EventController : Controller
+public partial class EventController : Controller
 {
     private readonly RepositoryContext _context;
     private readonly IMapper _mapper;
@@ -27,12 +27,12 @@ public class EventController : Controller
         _userManager = userManager;
         _repo = repo;
     }
-    public EventController(IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
-    {
-        _mapper = mapper;
-        _userManager = userManager;
-        _repo = repo;
-    }
+    // public EventController(IMapper mapper, UserManager<User> userManager, IRepositoryWrapper repo)
+    // {
+    //     _mapper = mapper;
+    //     _userManager = userManager;
+    //     _repo = repo;
+    // }
 
 
     public IActionResult OldIndex()
@@ -138,5 +138,16 @@ public class EventController : Controller
 
     }
 
+    public async Task<IActionResult> Details(int? id)
+    {
+        if(id is null) return NotFound();
 
+        Event? eventDetails = await _repo.Event.FindEventByIdAsync(id);
+
+        if(eventDetails is null) return NotFound();
+
+        ViewData["AttendeesCount"] = eventDetails.Attendees.Count;
+
+        return View(eventDetails);
+    }
 }

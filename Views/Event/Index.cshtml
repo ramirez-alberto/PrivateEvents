@@ -48,10 +48,8 @@
             @Html.DisplayFor(model => item.CreatedDate)
           </td>
           <td>
-            <form class="form-inline" asp-controller="Event" asp-action="FollowEvent">
-              <input type="hidden" name="eventId" value="@item.EventId" />
-              <button type="submit" class="btn btn-primary">Follow</button>
-            </form>
+            @* <partial name="_ActionButtonsPartial" model="item"/> *@
+            <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-primary"> Details</a>
           </td>
         </tr>
       }
