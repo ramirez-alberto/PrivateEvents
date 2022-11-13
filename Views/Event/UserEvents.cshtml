@@ -48,6 +48,9 @@
           <td>
             @Html.DisplayFor(model => item.CreatedDate)
           </td>
+          <td>
+            <partial name="_DetailsPartial" model="item" />
+          </td>
         </tr>
       }
     </tbody>

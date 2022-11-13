@@ -1,7 +1,4 @@
 @model PrivateEvents.Entities.Models.Event
-
-<partial name="_MenuPartial" />
-
 <h2>Details</h2>
 
 <div>
@@ -12,25 +9,25 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.User.UserName)
     </dd>
-        <dt class="col-sm-2">
+    <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Description)
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Description)
     </dd>
-        <dt class="col-sm-2">
+    <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.OnDate)
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.OnDate)
     </dd>
-        <dt class="col-sm-2">
+    <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Location)
     </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Location)
     </dd>
-        <dt class="col-sm-2">
+    <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.CreatedDate)
     </dt>
     <dd class="col-sm-10">
@@ -38,4 +35,22 @@
     </dd>
     <dt>Number of Attendees</dt>
     <dd>@ViewData["AttendeesCount"]</dd>
+</div>
+<div>
+    @* @Model.Attendees.Any(a => a.UserId == User.Claims.First().Value) *@
+    @if (ViewData["IsFollowed"] is null)
+    {
+        <form class="form-inline" asp-controller="Event" asp-action="FollowEvent">
+            <input type="hidden" name="eventId" value="@Model.EventId" />
+            <button type="submit" class="btn btn-info">Follow</button>
+        </form>
+    }
+    else
+    {
+        <form class="form-inline" asp-controller="Event" asp-action="UnfollowEvent">
+            <input type="hidden" name="eventId" value="@Model.EventId" />
+            <button type="submit" class="btn btn-info">Unfollow</button>
+        </form>
+    }
+    <a asp-action="Index">Back to List</a>
 </div>

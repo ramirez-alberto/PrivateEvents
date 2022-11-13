@@ -135,7 +135,12 @@ public partial class EventController : Controller
 
         if(eventDetails is null) return NotFound();
 
+        var userId = _userManager.GetUserId(User);
+
         ViewData["AttendeesCount"] = eventDetails.Attendees.Count;
+        
+        if(eventDetails.Attendees.Any(a => a.UserId == userId))
+            ViewData["IsFollowed"] = "true";
 
         return View(eventDetails);
     }

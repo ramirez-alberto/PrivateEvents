@@ -48,8 +48,7 @@
             @Html.DisplayFor(model => item.CreatedDate)
           </td>
           <td>
-            @* <partial name="_ActionButtonsPartial" model="item"/> *@
-            <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-primary"> Details</a>
+            <partial name="_DetailsPartial" model="item"/>
           </td>
         </tr>
       }
